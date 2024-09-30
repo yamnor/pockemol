@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import LZString from 'lz-string';
 import { Grip, Eye, Link2, Info, X } from 'lucide-react';
 
-function InputArea({ xyzData, setXyzData }) {
+function TextArea({ xyzData, setXyzData }) {
   return (
     <textarea
       value={xyzData}
@@ -14,7 +14,7 @@ function InputArea({ xyzData, setXyzData }) {
   );
 }
 
-function CanvasArea({ xyzData }) {
+function ViewArea({ xyzData }) {
   const viewerRef = useRef(null);
   useEffect(() => {
     const config = { backgroundColor: 'white' };
@@ -29,7 +29,7 @@ function CanvasArea({ xyzData }) {
     };
   }, [xyzData]);
   return (
-    <div className="molview" ref={viewerRef}></div>
+    <div className="viewarea" ref={viewerRef}></div>
   );
 }
 
@@ -40,7 +40,7 @@ function Modal({ isOpen, onClose, children }) {
     <div className="modal-overlay">
       <div className="modal-content">
         <button className="modal-close" onClick={onClose}>
-          <X size={36} />
+          <X size={32} />
         </button>
         {children}
       </div>
@@ -93,9 +93,9 @@ function App() {
         </button>
       </div>
       {mode === 'input' ? (
-        <InputArea xyzData={xyzData} setXyzData={setXyzData} />
+        <TextArea xyzData={xyzData} setXyzData={setXyzData} />
       ) : (
-        <CanvasArea xyzData={xyzData} />
+        <ViewArea xyzData={xyzData} />
       )}
       <Modal isOpen={isInfoModalOpen} onClose={() => setIsInfoModalOpen(false)}>
         <h2>PockeMol 🐿️</h2>
