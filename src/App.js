@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import LZString from 'lz-string';
-import { Grip, Eye, Link2, Info } from 'lucide-react';
+import { Grip, Eye, Link2, Info, X } from 'lucide-react';
 
 function InputArea({ xyzData, setXyzData }) {
   return (
@@ -28,15 +28,30 @@ function CanvasArea({ xyzData }) {
       viewer.clear();
     };
   }, [xyzData]);
+  return (
+    <div className="molview" ref={viewerRef}></div>
+  );
+}
+
+function Modal({ isOpen, onClose, children }) {
+  if (!isOpen) return null;
 
   return (
-    <div class="molview" ref={viewerRef}></div>
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <button className="modal-close" onClick={onClose}>
+          <X size={24} />
+        </button>
+        {children}
+      </div>
+    </div>
   );
 }
 
 function App() {
   const [mode, setMode] = useState('input');
   const [xyzData, setXyzData] = useState('');
+  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
 
   useEffect(() => {
     const hash = window.location.hash.slice(1);
@@ -61,14 +76,14 @@ function App() {
   };
 
   const handleInfoButton = () => {
-    window.open('https://github.com/yamnor/pockemol', '_blank', 'noopener,noreferrer')
+    setIsInfoModalOpen(true);
   };
 
   return (
     <main>
-      <div class='buttonContainer'>
+      <div className='buttonContainer'>
         <button onClick={() => setMode(mode === 'input' ? 'view' : 'input')}>
-          {mode === 'input' ? <Eye size={24} /> : <Grip size={24} /> }
+          {mode === 'input' ? <Eye size={24} /> : <Grip size={24} />}
         </button>
         <button onClick={handleLinkButton}>
           <Link2 size={24} />
@@ -82,6 +97,18 @@ function App() {
       ) : (
         <CanvasArea xyzData={xyzData} />
       )}
+      <Modal isOpen={isInfoModalOpen} onClose={() => setIsInfoModalOpen(false)}>
+        <h2>PockeMol 🐿️</h2>
+        <p><strong>PockeMol</strong> is an easy-to-use web app designed for visualizing and sharing molecular structures.</p>
+        <h3>How to use</h3>
+        <ul>
+          <li>Click <i><Eye size={14} /></i> button to switch the <strong>view mode</strong></li>
+          <li>Click <i><Grip size={14} /></i> button to switch the <strong>input mode</strong></li>
+          <li>Input XYZ data</li>
+          <li>Use the link icon to generate a shareable URL</li>
+        </ul>
+        <p>For more information, visit our <a href="https://github.com/yamnor/pockemol" target="_blank" rel="noopener noreferrer">GitHub repository</a>.</p>
+      </Modal>
     </main>
   );
 }
