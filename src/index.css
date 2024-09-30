@@ -18,9 +18,10 @@ textarea {
   border-radius: 8px;
   padding: 10px;
   margin: 70px 0 auto;
-  max-width: calc(100dvw - 10px);
+  max-width: 92dvw;
   height: calc(100dvh - 105px);
   caret-color: #3E95BA;
+  background-color: white;
 }
 
 .viewarea {
@@ -67,21 +68,6 @@ button {
   z-index: 1000;
 }
 
-.modal-content {
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  font-size: 1rem;
-  line-height: 1.4;
-  text-align: left;
-  background-color: white;
-  padding: 0.5rem 1.5rem;
-  border-radius: 8px;
-  width: 500px;
-  max-width: 85%;
-  max-height: 85%;
-  overflow-y: auto;
-  position: relative;
-}
-
 .modal-close {
   position: absolute;
   top: 15px;
@@ -93,25 +79,44 @@ button {
   height: 32px;
 }
 
-h2 {
-  margin-top: 1rem;
+.modal-content {
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 0.95rem;
+  line-height: 1.35;
+  text-align: left;
+  background-color: white;
+  padding: 0.5rem 1.5rem;
+  border-radius: 8px;
+  width: 500px;
+  max-width: 85dvw;
+  max-height: 90dvh;
+  overflow-y: auto;
+  position: relative;
 }
 
-ul {
+.modal-content p {
+  margin: 0.8rem 0;
+}
+
+.modal-content h2 {
+  margin: 1rem 0;
+}
+
+.modal-content ul {
   padding-left: 20px;
 }
 
-li {
+.modal-content li {
   margin-bottom: 10px;
 }
 
-a {
+.modal-content a {
   color: #3E95BA;
   text-decoration: none;
   font-weight: bold;
 }
 
-i {
+.modal-content i {
   display: inline-block;
   width: 28px;
   height: 28px;
