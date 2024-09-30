@@ -18,6 +18,7 @@ textarea {
   border-radius: 8px;
   padding: 10px;
   margin: 70px 0 auto;
+  width: 680px;
   max-width: 90dvw;
   height: calc(100dvh - 105px);
   caret-color: #3E95BA;

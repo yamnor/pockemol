@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import LZString from 'lz-string';
-import { Grip, Eye, Link2, Info, X } from 'lucide-react';
+import { Grip, Eye, Link, Squirrel, Info, X } from 'lucide-react';
 
 function TextArea({ xyzData, setXyzData }) {
   return (
@@ -8,7 +8,6 @@ function TextArea({ xyzData, setXyzData }) {
       value={xyzData}
       onChange={(e) => setXyzData(e.target.value)}
       placeholder="Input XYZ data here"
-      cols="80"
       wrap="off"
     />
   );
@@ -21,7 +20,7 @@ function ViewArea({ xyzData }) {
     const viewer = window.$3Dmol.createViewer(viewerRef.current, config);
     viewer.clear();
     viewer.addModel(xyzData, 'xyz');
-    viewer.addStyle({}, { stick: {}, sphere: { scale: 0.3 } });
+    viewer.setStyle({}, { stick: {}, sphere: { scale: 0.3 } });
     viewer.zoomTo();
     viewer.render();
     return () => {
@@ -52,6 +51,7 @@ function App() {
   const [mode, setMode] = useState('input');
   const [xyzData, setXyzData] = useState('');
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
 
   useEffect(() => {
     const hash = window.location.hash.slice(1);
@@ -72,7 +72,8 @@ function App() {
     const compressedData = LZString.compressToEncodedURIComponent(xyzData);
     const url = `${window.location.origin}${window.location.pathname}#${compressedData}`;
     navigator.clipboard.writeText(url);
-    alert('Copied to clipboard!');
+    setIsCopied(true);
+    setTimeout(() => setIsCopied(false), 600);
   };
 
   const handleInfoButton = () => {
@@ -86,7 +87,7 @@ function App() {
           {mode === 'input' ? <Eye size={24} /> : <Grip size={24} />}
         </button>
         <button onClick={handleLinkButton}>
-          <Link2 size={24} />
+        {isCopied ? <Squirrel size={24} /> : <Link size={24} />}
         </button>
         <button onClick={handleInfoButton}>
           <Info size={24} />
@@ -103,7 +104,7 @@ function App() {
         <ul>
           <li>Click on <i><Eye size={14} /></i> to switch to the <strong>view</strong> mode and see the 3D molecular structure.</li>
           <li>Click on <i><Grip size={14} /></i> to switch to the <strong>input</strong> mode and enter the XYZ coordinate of the molecule.</li>
-          <li>Click on <i><Link2 size={14} /></i> to generate a shareable URL containing structural data on the molecule.</li>
+          <li>Click on <i><Link size={14} /></i> to generate a shareable URL containing structural data on the molecule.</li>
         </ul>
         <p><strong>PockeMol</strong> was created by <a href="https://yamnor.me" target="_blank" rel="noopener noreferrer">yamnor</a>,
         a chemist 🧪 specializing in molecular simulation 🖥️ living in Japan 🇯🇵.</p>
