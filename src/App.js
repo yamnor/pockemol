@@ -106,8 +106,8 @@ function App() {
           <li>Click on <i><Link2 size={14} /></i> to generate a shareable URL containing structural data on the molecule.</li>
         </ul>
         <p><strong>PockeMol</strong> was created by <a href="https://yamnor.me" target="_blank" rel="noopener noreferrer">yamnor</a>,
-        a chemist specializing in molecular simulation living in Japan.</p>
-        <p>If you have any questions, thoughts, or comments, feel free to <a href="https://letterbird.co/yamnor" target="_blank" rel="noopener noreferrer">contact me</a> or
+        a chemist 🧪 specializing in molecular simulation 🖥️ living in Japan 🇯🇵.</p>
+        <p>If you have any questions, thoughts, or comments, feel free to <a href="https://letterbird.co/yamnor" target="_blank" rel="noopener noreferrer">contact me</a> ✉️ or
         find me on <a href="https://x.com/yamnor" target="_blank" rel="noopener noreferrer">X</a>.</p>
         <p>For more information, visit my <a href="https://github.com/yamnor/pockemol" target="_blank" rel="noopener noreferrer">GitHub repository</a>.</p>
       </Modal>
