@@ -108,14 +108,15 @@ li {
 a {
   color: #3E95BA;
   text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
+  font-weight: bold;
 }
 
 i {
-  padding: 0 6px;
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
+  text-align: center;
   border-radius: 50%;
   background-color: #f0f0f0;
 }
