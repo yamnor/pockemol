@@ -57,7 +57,7 @@ function App() {
   };
 
   const handleInfoButton = () => {
-    window.open('https://yamnor.me', '_blank', 'noopener,noreferrer')
+    window.open('https://github.com/yamnor/pockemol', '_blank', 'noopener,noreferrer')
   };
 
   return (
