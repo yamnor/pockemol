@@ -40,7 +40,7 @@ function Modal({ isOpen, onClose, children }) {
     <div className="modal-overlay">
       <div className="modal-content">
         <button className="modal-close" onClick={onClose}>
-          <X size={24} />
+          <X size={36} />
         </button>
         {children}
       </div>
@@ -100,14 +100,16 @@ function App() {
       <Modal isOpen={isInfoModalOpen} onClose={() => setIsInfoModalOpen(false)}>
         <h2>PockeMol 🐿️</h2>
         <p><strong>PockeMol</strong> is an easy-to-use web app designed for visualizing and sharing molecular structures.</p>
-        <h3>How to use</h3>
         <ul>
-          <li>Click <i><Eye size={14} /></i> button to switch the <strong>view mode</strong></li>
-          <li>Click <i><Grip size={14} /></i> button to switch the <strong>input mode</strong></li>
-          <li>Input XYZ data</li>
-          <li>Use the link icon to generate a shareable URL</li>
+          <li>Click on <i><Eye size={14} /></i> to switch to the <strong>view</strong> mode and see the 3D molecular structure.</li>
+          <li>Click on <i><Grip size={14} /></i> to switch to the <strong>input</strong> mode and enter the XYZ coordinate of the molecule.</li>
+          <li>Click on <i><Link2 size={14} /></i> to generate a shareable URL containing structural data on the molecule.</li>
         </ul>
-        <p>For more information, visit our <a href="https://github.com/yamnor/pockemol" target="_blank" rel="noopener noreferrer">GitHub repository</a>.</p>
+        <p><strong>PockeMol</strong> was created by <a href="https://yamnor.me" target="_blank" rel="noopener noreferrer">yamnor</a>,
+        a chemist specializing in molecular simulation living in Japan.</p>
+        <p>If you have any questions, thoughts, or comments, feel free to <a href="https://letterbird.co/yamnor" target="_blank" rel="noopener noreferrer">contact me</a> or
+        find me on <a href="https://x.com/yamnor" target="_blank" rel="noopener noreferrer">X</a>.</p>
+        <p>For more information, visit my <a href="https://github.com/yamnor/pockemol" target="_blank" rel="noopener noreferrer">GitHub repository</a>.</p>
       </Modal>
     </main>
   );
