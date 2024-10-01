@@ -22,7 +22,8 @@ function ViewArea({ xyzData }) {
     };
     const viewer = $3Dmol.createViewer(viewerRef.current, config);
     viewer.clear();
-    viewer.addModel(xyzData, 'xyz');
+    viewer.addModelsAsFrames(xyzData, 'xyz', {'keepH': true});
+    viewer.animate({loop: "forward", reps: 0, interval: 200});
     viewer.setStyle({}, { stick: {}, sphere: { scale: 0.3 } });
     viewer.zoomTo();
     viewer.render();
