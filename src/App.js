@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import LZString from 'lz-string';
 import { Grip, Eye, Link, Squirrel, Info, X } from 'lucide-react';
+import * as $3Dmol from '3dmol/build/3Dmol.js';
 
 function TextArea({ xyzData, setXyzData }) {
   return (
@@ -16,8 +17,11 @@ function TextArea({ xyzData, setXyzData }) {
 function ViewArea({ xyzData }) {
   const viewerRef = useRef(null);
   useEffect(() => {
-    const config = { backgroundColor: 'white' };
-    const viewer = window.$3Dmol.createViewer(viewerRef.current, config);
+    const config = {
+      backgroundColor: 'white',
+      useOffScreenRendering: false,
+    };
+    const viewer = $3Dmol.createViewer(viewerRef.current, config);
     viewer.clear();
     viewer.addModel(xyzData, 'xyz');
     viewer.setStyle({}, { stick: {}, sphere: { scale: 0.3 } });
