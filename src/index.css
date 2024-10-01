@@ -66,11 +66,18 @@ button {
   cursor: pointer;
 }
 
+@media (hover: hover) {
+  button:hover {
+    color: var(--black);
+  }
+}
+
 .buttonContainer {
   z-index: 100;
   position: fixed;
   top: 10px;
   width: 100%;
+  left: 0;
 }
 
 /* Modal */
