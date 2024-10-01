@@ -3,12 +3,22 @@ import LZString from 'lz-string';
 import { Grip, Eye, Link, Squirrel, Info, X } from 'lucide-react';
 import * as $3Dmol from '3dmol/build/3Dmol.js';
 
-function TextArea({ xyzData, setXyzData }) {
+const encodeContent = (content) => {
+  const encodedContent = LZString.compressToEncodedURIComponent(content)
+  return encodedContent
+}
+
+const decodeContent = (encodedContent) => {
+  const decodedContent = LZString.decompressFromEncodedURIComponent(encodedContent)
+  return decodedContent || ''
+}
+
+function TextArea({ xyzData, setData }) {
   return (
     <textarea
       value={xyzData}
-      onChange={(e) => setXyzData(e.target.value)}
-      placeholder="Input XYZ data here"
+      onChange={(e) => setData(e.target.value)}
+      placeholder="Input XYZ data here..."
       wrap="off"
     />
   );
@@ -20,16 +30,23 @@ function ViewArea({ xyzData }) {
     const config = {
       backgroundColor: 'white',
     };
-    const viewer = $3Dmol.createViewer(viewerRef.current, config);
-    viewer.clear();
-    viewer.addModelsAsFrames(xyzData, 'xyz', {'keepH': true});
-    viewer.animate({loop: "forward", reps: 0, interval: 200});
-    viewer.setStyle({}, { stick: {}, sphere: { scale: 0.3 } });
-    viewer.zoomTo();
-    viewer.render();
-    return () => {
+    try {
+      const viewer = $3Dmol.createViewer(viewerRef.current, config);
       viewer.clear();
-    };
+      if (!xyzData) {
+        throw new Error('Invalid XYZ data');
+      }
+      viewer.addModelsAsFrames(xyzData, 'xyz', {'keepH': true});
+      viewer.animate({loop: "forward", reps: 0, interval: 200});
+      viewer.setStyle({}, { stick: {}, sphere: { scale: 0.3 } });
+      viewer.zoomTo();
+      viewer.render();
+      return () => {
+        viewer.clear();
+      };
+    } catch (error) {
+      console.error(error);
+    }
   }, [xyzData]);
   return (
     <div className="viewarea" ref={viewerRef}></div>
@@ -53,28 +70,27 @@ function Modal({ isOpen, onClose, children }) {
 
 function App() {
   const [mode, setMode] = useState('input');
-  const [xyzData, setXyzData] = useState('');
+  const [xyzData, setData] = useState('');
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
 
   useEffect(() => {
     const hash = window.location.hash.slice(1);
     if (hash) {
-      const decompressedData = LZString.decompressFromEncodedURIComponent(hash);
-      if (decompressedData) {
-        setXyzData(decompressedData);
-        setMode('view');
-      }
+      const decodedData = decodeContent(hash);
+      setData(decodedData);
+      setMode('view');
     } else {
       const exampleData = 'EwFgUGByAEtwjAOgKwA4AMq53Yg7OsHttALS7BECcYAwidEgQGzAnn4DMeI7F8wZlAa5knEOnZJkzPPD6JOydJzojFwTvJJJOzdJJK5CPNdg6oBndSGRj1meHjNwOzKrIVVOlBemaswubAiPCoqMzq7lSG2BR4qKr0wYioyAIKyMDoyOrAYsBBrkhUYsTm0mFYRojoIIIuOIjMMtWunLVEvOa48LLIYADyDCGWelKI+WgKfd5DeaggVCMoPN1xochU8I1ko+geKwZa6so+u9CjnOja2NIG67Ac8B6oYAAS7B1URLdPuLJUOUNtxAp8dIgQKhNF9IXVIj18BEBuDXPFMLCsnUFFDmG9UU00p5zB1gFQYuogeEPuwQiArCseAkFNknDSUvp6is9MA-rBpJQdgSyB1UFQ8NYId4QI9YLg9KV2dgOlstgwkCpOJK0aktOBhdBSaBlhDkHhtpSpkq4CFmCATiQQulrplzZwgA';
-      setXyzData(LZString.decompressFromEncodedURIComponent(exampleData));
+      setData(decodeContent(exampleData));
       setMode('input');
     }
   }, []);
 
   const handleLinkButton = () => {
-    const compressedData = LZString.compressToEncodedURIComponent(xyzData);
-    const url = `${window.location.origin}${window.location.pathname}#${compressedData}`;
+    const encodedData = encodeContent(xyzData);
+    const url = `${window.location.origin}/#${encodedData}`;
+    window.location.hash = `#${encodedData}`;
     navigator.clipboard.writeText(url);
     setIsCopied(true);
     setTimeout(() => setIsCopied(false), 600);
@@ -98,7 +114,7 @@ function App() {
         </button>
       </div>
       {mode === 'input' ? (
-        <TextArea xyzData={xyzData} setXyzData={setXyzData} />
+        <TextArea xyzData={xyzData} setData={setData} />
       ) : (
         <ViewArea xyzData={xyzData} />
       )}
