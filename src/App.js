@@ -88,13 +88,13 @@ function App() {
     <main>
       <div className='buttonContainer'>
         <button onClick={() => setMode(mode === 'input' ? 'view' : 'input')}>
-          {mode === 'input' ? <Eye size={24} /> : <Grip size={24} />}
+          {mode === 'input' ? <Eye size={28} /> : <Grip size={28} />}
         </button>
         <button onClick={handleLinkButton}>
-        {isCopied ? <Squirrel size={24} /> : <Link size={24} />}
+        {isCopied ? <Squirrel size={28} /> : <Link size={28} />}
         </button>
         <button onClick={handleInfoButton}>
-          <Info size={24} />
+          <Info size={28} />
         </button>
       </div>
       {mode === 'input' ? (
