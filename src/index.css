@@ -1,8 +1,30 @@
+:root {
+  --black: #263238;
+  --grey: #a9a9a9;
+  --lightgrey: #f5f5f5;
+  --lightblue: #3E95BA;
+  --pink: #ad1457;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+  padding: 0;
+}
+
+*:focus {
+  outline: none;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 body {
   margin: 0;
   padding: 5px;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
 }
 
@@ -11,17 +33,18 @@ main {
 }
 
 textarea {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace;
+  font-family: var(--font-mono);
   font-size: 14px;
   line-height: 1.4;
-  border: 1px dashed #ccc;
+  border: 1px dashed var(--grey);
   border-radius: 8px;
   padding: 10px;
   margin: 70px 0 auto;
   width: 680px;
-  max-width: 90dvw;
-  height: calc(100dvh - 105px);
-  caret-color: #3E95BA;
+  max-width: 95dvw;
+  height: calc(100dvh - 90px);
+  color: var(--black);
+  caret-color: var(--lightblue);
   background-color: white;
 }
 
@@ -38,8 +61,8 @@ button {
   height: 50px;
   border: none;
   border-radius: 50px;
-  color: grey;
-  background-color: #f0f0f0;
+  color: var(--grey);
+  background-color: var(--lightgrey);
   cursor: pointer;
 }
 
@@ -48,10 +71,6 @@ button {
   position: fixed;
   top: 10px;
   width: 100%;
-}
-
-*:focus {
-  outline: none;
 }
 
 /* Modal */
@@ -81,10 +100,11 @@ button {
 }
 
 .modal-content {
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-family: var(--font-sans);
   font-size: 0.95rem;
   line-height: 1.35;
   text-align: left;
+  color: var(--black);
   background-color: white;
   padding: 0.4rem 0.95rem;
   border-radius: 8px;
@@ -112,7 +132,7 @@ button {
 }
 
 .modal-content a {
-  color: #3E95BA;
+  color: var(--lightblue);
   text-decoration: none;
   font-weight: bold;
 }
@@ -124,5 +144,5 @@ button {
   line-height: 28px;
   text-align: center;
   border-radius: 50%;
-  background-color: #f0f0f0;
+  background-color: var(--lightgrey);
 }
