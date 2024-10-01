@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import LZString from 'lz-string';
 import { Grip, Eye, Link, Squirrel, Info, X } from 'lucide-react';
 import * as $3Dmol from '3dmol/build/3Dmol.js';
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
 
 const encodeContent = (content) => {
   const encodedContent = LZString.compressToEncodedURIComponent(content)
@@ -12,6 +14,34 @@ const decodeContent = (encodedContent) => {
   const decodedContent = LZString.decompressFromEncodedURIComponent(encodedContent)
   return decodedContent || ''
 }
+
+const isValidXyzData =(data) => {
+  const lines = data.trim().split('\n');
+  let index = 0;
+  while (index < lines.length) {
+    const atomCount = parseInt(lines[index].trim(), 10);
+    if (isNaN(atomCount) || atomCount <= 0) {
+      return false;
+    }
+    index += 2;
+    for (let i = 0; i < atomCount; i++) {
+      const line = lines[index];
+      if (!line) {
+        return false;
+      }
+      const parts = line.trim().split(/\s+/);
+      if (parts.length < 4) {
+        return false;
+      }
+      const [, x, y, z] = parts;
+      if (isNaN(parseFloat(x)) || isNaN(parseFloat(y)) || isNaN(parseFloat(z))) {
+        return false;
+      }
+      index += 1;
+    }
+  }
+  return true;
+};
 
 function TextArea({ xyzData, setData }) {
   return (
@@ -30,23 +60,16 @@ function ViewArea({ xyzData }) {
     const config = {
       backgroundColor: 'white',
     };
-    try {
-      const viewer = $3Dmol.createViewer(viewerRef.current, config);
+    const viewer = $3Dmol.createViewer(viewerRef.current, config);
+    viewer.clear();
+    viewer.addModelsAsFrames(xyzData, 'xyz', {'keepH': true});
+    viewer.animate({loop: "forward", reps: 0, interval: 200});
+    viewer.setStyle({}, { stick: {}, sphere: { scale: 0.3 } });
+    viewer.zoomTo();
+    viewer.render();
+    return () => {
       viewer.clear();
-      if (!xyzData) {
-        throw new Error('Invalid XYZ data');
-      }
-      viewer.addModelsAsFrames(xyzData, 'xyz', {'keepH': true});
-      viewer.animate({loop: "forward", reps: 0, interval: 200});
-      viewer.setStyle({}, { stick: {}, sphere: { scale: 0.3 } });
-      viewer.zoomTo();
-      viewer.render();
-      return () => {
-        viewer.clear();
-      };
-    } catch (error) {
-      console.error(error);
-    }
+    };
   }, [xyzData]);
   return (
     <div className="viewarea" ref={viewerRef}></div>
@@ -69,7 +92,7 @@ function Modal({ isOpen, onClose, children }) {
 }
 
 function App() {
-  const [mode, setMode] = useState('input');
+  const [mode, setMode] = useState('data');
   const [xyzData, setData] = useState('');
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
@@ -77,23 +100,42 @@ function App() {
   useEffect(() => {
     const hash = window.location.hash.slice(1);
     if (hash) {
-      const decodedData = decodeContent(hash);
-      setData(decodedData);
-      setMode('view');
+      const xyzData = decodeContent(hash);
+      if (isValidXyzData(xyzData)) {
+        setData(xyzData);
+        setMode('view');
+      } else {
+        alert('Invalid XYZ data.');
+        setData('');
+        window.location.hash = '';
+        setMode('data');
+      }
     } else {
       const exampleData = 'EwFgUGByAEtwjAOgKwA4AMq53Yg7OsHttALS7BECcYAwidEgQGzAnn4DMeI7F8wZlAa5knEOnZJkzPPD6JOydJzojFwTvJJJOzdJJK5CPNdg6oBndSGRj1meHjNwOzKrIVVOlBemaswubAiPCoqMzq7lSG2BR4qKr0wYioyAIKyMDoyOrAYsBBrkhUYsTm0mFYRojoIIIuOIjMMtWunLVEvOa48LLIYADyDCGWelKI+WgKfd5DeaggVCMoPN1xochU8I1ko+geKwZa6so+u9CjnOja2NIG67Ac8B6oYAAS7B1URLdPuLJUOUNtxAp8dIgQKhNF9IXVIj18BEBuDXPFMLCsnUFFDmG9UU00p5zB1gFQYuogeEPuwQiArCseAkFNknDSUvp6is9MA-rBpJQdgSyB1UFQ8NYId4QI9YLg9KV2dgOlstgwkCpOJK0aktOBhdBSaBlhDkHhtpSpkq4CFmCATiQQulrplzZwgA';
       setData(decodeContent(exampleData));
-      setMode('input');
+      setMode('data');
     }
   }, []);
 
+  const handleViewButton = () => {
+    if (isValidXyzData(xyzData)) {
+      setMode('view');
+    } else {
+      alert('Invalid XYZ data.');
+    }
+  };
+
   const handleLinkButton = () => {
-    const encodedData = encodeContent(xyzData);
-    const url = `${window.location.origin}/#${encodedData}`;
-    window.location.hash = `#${encodedData}`;
-    navigator.clipboard.writeText(url);
-    setIsCopied(true);
-    setTimeout(() => setIsCopied(false), 600);
+    if (isValidXyzData(xyzData)) {
+      const encodedData = encodeContent(xyzData);
+      const url = `${window.location.origin}/#${encodedData}`;
+      window.location.hash = `#${encodedData}`;
+      navigator.clipboard.writeText(url);
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 600);
+    } else {
+      alert('Invalid XYZ data.');
+    }
   };
 
   const handleInfoButton = () => {
@@ -103,17 +145,31 @@ function App() {
   return (
     <main>
       <div className='buttonContainer'>
-        <button onClick={() => setMode(mode === 'input' ? 'view' : 'input')}>
-          {mode === 'input' ? <Eye size={28} /> : <Grip size={28} />}
-        </button>
-        <button onClick={handleLinkButton}>
-        {isCopied ? <Squirrel size={28} /> : <Link size={28} />}
-        </button>
+        {mode === 'data' ? (
+          <button onClick={handleViewButton}>
+            <Eye size={28} />
+          </button>
+        ) : (
+          <button onClick={() => setMode('data')}>
+            <Grip size={28} />
+          </button>
+        )}
+        {isCopied ? (
+          <Tippy content="Copied!">
+            <button>
+              <Squirrel size={28} />
+            </button>
+          </Tippy>
+        ) : (
+          <button onClick={handleLinkButton}>
+            <Link size={28} />
+          </button>
+        )}
         <button onClick={handleInfoButton}>
           <Info size={28} />
         </button>
       </div>
-      {mode === 'input' ? (
+      {mode === 'data' ? (
         <TextArea xyzData={xyzData} setData={setData} />
       ) : (
         <ViewArea xyzData={xyzData} />
