@@ -19,7 +19,6 @@ function ViewArea({ xyzData }) {
   useEffect(() => {
     const config = {
       backgroundColor: 'white',
-      useOffScreenRendering: false,
     };
     const viewer = $3Dmol.createViewer(viewerRef.current, config);
     viewer.clear();
