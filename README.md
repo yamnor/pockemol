@@ -6,6 +6,8 @@ Try it at [pockemol.yamnor.me](https://pockemol.yamnor.me)!
 
 PockeMol is an easy-to-use web application designed for visualizing and sharing molecular structures.
 
+![](https://i.gyazo.com/2f67a84fecbf59c2c52b142010b97d0d.gif)
+
 ## Background
 
 PockeMol was created to address the need for an easy-to-use, shareable molecular visualization tool. By leveraging client-side technologies, it provides a secure and efficient way for chemists, researchers, and students to view and share molecular structures without the need for server-side processing or data storage.
